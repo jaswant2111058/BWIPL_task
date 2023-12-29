@@ -37,23 +37,11 @@ router.post('/login',
 
 router.post('/password/reset',
   [
-    body("email").exists().withMessage("email is required"),
-  ],
-  userController.authMiddleware,userController.sendOtp
-);
-
-
-
-
-
-router.post('/password/reset/verify',
-  [
-    body("email").exists().withMessage("email is required"),
-    body("password").exists().withMessage("New password is required"),
+    body("password").exists().withMessage("password is required"),
+    body("newPassword").exists().withMessage("new password is required"),
   ],
   userController.authMiddleware,userController.resetPassword
 );
-
 
 
 

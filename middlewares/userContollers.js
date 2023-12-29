@@ -146,3 +146,46 @@ exports.verifySave = async (req, res) => {
 
 
 
+exports.resetPassword = async(req,res)=>{
+
+    const {newPassword, password } = req.body;
+    const email = req.email;
+
+    const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(401).json({ message: 'User email does not exist' });
+        }
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if (!isPasswordCorrect) {
+            return res.status(401).json({ message: 'Incorrect password' });
+        }
+
+        bcrypt.hash(newPassword, 12, async function (err, hash) {
+            
+            const updated = User.updateOne({email},{password : hash})
+            console.log(updated);
+            res.stats(200).send({ message: 'password has been changed. Go to the Login page and login through email & password' });
+        });
+}
+
+
+
+
+exports.resetName = async (req,res)=>{
+
+    const {newName} = req.body
+    const email = req.email
+    const updated = User.updateOne({email},{name : newName})
+    if (updated)
+    res.stats(200).send({message : "Name has been changed"})
+    
+    else
+    res.stats(400).send("unknown Error update not successful")
+
+
+}
+
+
+
+
