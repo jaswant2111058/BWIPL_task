@@ -15,20 +15,20 @@ const  storage = multer.diskStorage({
 const upload = multer({storage : storage });
 
 
-router.post('/add/img', upload.single('image'),
+
+router.post('/user/addimg', upload.single('image'),
     userController.authMiddleware,
-    imagesController.addProfileImage
+    imagesController.userAddProfileImage
 );
 
-// router.post('/update/img', upload.single('image'),
-//     userController.authMiddleware,
-//     imagesController.updateProfileImage
-// );
+router.post('/admin/addimg', upload.single('image'),
+    userController.authMiddleware,
+    imagesController.adminAddProfileImage
+);
 
 
 router.get('/img/:_id',
     imagesController.preview
 );
-
 
 module.exports = router;

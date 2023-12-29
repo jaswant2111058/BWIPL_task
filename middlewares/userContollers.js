@@ -183,7 +183,6 @@ exports.resetName = async (req,res)=>{
     else
     res.stats(400).send("unknown Error update not successful")
 
-
 }
 
 

@@ -16,11 +16,11 @@ router.post(
 );
 
 // Route for email verification
-router.get('/email/verification', adminControllers.verifySave);
+router.get('/email/verification',
+ adminControllers.verifySave);
 
 // Route for user login
-router.post(
-  '/login',
+router.post('/login',
   [
     body('email').exists().withMessage('Email is required'),
     body('password').exists().withMessage('Password is required'),
@@ -29,7 +29,8 @@ router.post(
 );
 
 // Route for sending OTP for password reset
-router.post('/password/reset', [body('email').exists().withMessage('Email is required')], 
+router.post('/password/reset',
+[body('email').exists().withMessage('Email is required')], 
 adminControllers.sendRestmail);
 
 // Route for resetting password
@@ -39,11 +40,14 @@ router.post(
     body('email').exists().withMessage('Email is required'),
     body('password').exists().withMessage('New password is required'),
   ],
-  adminControllers.authMiddleware,adminControllers.resetPassword
+  adminControllers.authMiddleware,
+  adminControllers.resetPassword
 );
 
 // Route for resetting user name
-router.post('/name/reset', [body('rename').exists().withMessage('New name is required')], adminControllers.resetName);
+router.post('/name/reset', [body('rename').exists().withMessage('New name is required')],
+ adminControllers.resetName
+ );
 
 // Route for adding a profile image
 router.post(
@@ -52,7 +56,8 @@ router.post(
     body('email').exists().withMessage('Email is required'),
     body('password').exists().withMessage('Password is required'),
   ],
-  adminControllers.authMiddleware,adminControllers.addProfileImage
+  adminControllers.authMiddleware,
+  adminControllers.addProfileImage
 );
 
 // Route for resetting a profile image
@@ -62,7 +67,8 @@ router.post(
     body('email').exists().withMessage('Email is required'),
     body('password').exists().withMessage('Password is required'),
   ],
-  adminControllers.authMiddleware,adminControllers.resetProfileImage
+  adminControllers.authMiddleware,
+  adminControllers.resetProfileImage
 );
 
 // Route for deleting a user
@@ -72,7 +78,8 @@ router.post(
     body('email').exists().withMessage('Email is required'),
     body('password').exists().withMessage('Password is required'),
   ],
-  adminControllers.authMiddleware,adminControllers.deleteUser
+  adminControllers.authMiddleware,
+  adminControllers.deleteUser
 );
 
 // Route for deleting an admin
@@ -82,7 +89,8 @@ router.post(
     body('email').exists().withMessage('Email is required'),
     body('password').exists().withMessage('Password is required'),
   ],
-  adminControllers.authMiddleware,adminControllers.deleteAdmin
+  adminControllers.authMiddleware,
+  adminControllers.deleteAdmin
 );
 
 module.exports = router;
