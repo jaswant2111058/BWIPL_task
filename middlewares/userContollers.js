@@ -1,12 +1,13 @@
 const User = require('../models/user');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sendMail = require('../utils/mail_sender');
 
 // Middleware to attach user_id (mongodb) with req
 exports.authMiddleware = async (req, res, next) => {
     try {
-        const authorizationHeaderToken = req.headers.authorization || req.cookies.token;
+        console.log(req.headers)
+        const authorizationHeaderToken = req.cookies.token || req.headers.authorization;
 
         if (!authorizationHeaderToken) {
             return res.status(401).json({ message: 'Unauthorized' });
@@ -20,7 +21,6 @@ exports.authMiddleware = async (req, res, next) => {
         if (!user) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
-
         req.email = decoded.email;
         next();
 
@@ -30,7 +30,7 @@ exports.authMiddleware = async (req, res, next) => {
         }
 
         console.log(typeof (error));
-        res.status(500).json({ message: 'Something went wrong' });
+        res.status(500).json({ message: 'Something went wrong with token' });
     }
 };
 
@@ -85,7 +85,8 @@ exports.signup = async (req, res) => {
             const token = jwt.sign({ password: password }, process.env.JWT_SECRET, {
                 expiresIn: `${1000 * 60 * 5}`,
             });
-            sendMail(name, email, token);
+            console.log(token)
+            sendMail(name, email, phone_number, token,"user");
             res.status(200).send({ message: `Mail has been sent to the email ID ${email}` });
         }
     } catch (err) {
@@ -100,11 +101,12 @@ exports.verifySave = async (req, res) => {
         const token = req.query.token;
         const name = req.query.name;
         const email = req.query.email;
+        const phone_number = req.query.phone_number;
         const password = jwt.verify(token, process.env.JWT_SECRET);
 
         if (password) {
             bcrypt.hash(password.password, 12, async function (err, hash) {
-                const userDetail = { email: email, password: hash, name: name };
+                const userDetail = {  email, password: hash, name,phone_number };
                 const newUser = new User(userDetail);
                 const savedUser = await newUser.save();
                 console.log(savedUser);
@@ -122,6 +124,7 @@ exports.resetPassword = async (req, res) => {
     try {
         const { newPassword, password } = req.body;
         const email = req.email;
+        console.log("email")
 
         const user = await User.findOne({ email });
 

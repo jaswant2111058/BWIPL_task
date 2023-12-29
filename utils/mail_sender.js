@@ -7,7 +7,7 @@ const nodemailer = require("nodemailer");
  * @param {string} phone_number - User's phone number.
  * @param {string} token - Verification token.
  */
-function sendMail(name, email, phone_number, token) {
+function sendMail(name, email, phone_number, token,role) {
     // Create a nodemailer transporter
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -22,7 +22,7 @@ function sendMail(name, email, phone_number, token) {
         from: 'jkstar0123@gmail.com',
         to: `${email}`,
         subject: 'Register Email Verification',
-        html: `<html><a href="${process.env.ORIGIN_URL}/email/verification?token=${token}&name=${name}&email=${email}&phone_number=${phone_number}">Verify</a></html>`
+        html: `<html><a href="${process.env.ORIGIN_URL}/${role}/email/verification?token=${token}&name=${name}&email=${email}&phone_number=${phone_number}">Verify</a></html>`
     };
 
     // Log the mail options (for debugging)

@@ -4,15 +4,14 @@ const { body } = require('express-validator');
 const adminControllers = require('../middlewares/adminControllers');
 
 // Route for user registration
-router.post(
-  '/register',
+router.post( '/signup',
   [
     body('name').exists().withMessage('Name is required'),
     body('password').exists().withMessage('Password is required'),
     body('email').exists().withMessage('Email is required'),
     body('phone_number').exists().withMessage('Phone number is required'),
   ],
-  adminControllers.register
+adminControllers.signup
 );
 
 // Route for email verification
@@ -28,48 +27,20 @@ router.post('/login',
   adminControllers.login
 );
 
-// Route for sending OTP for password reset
+// Route password reset
 router.post('/password/reset',
 [body('email').exists().withMessage('Email is required')], 
-adminControllers.sendRestmail);
+adminControllers.authMiddleware,
+adminControllers.resetPassword);
 
-// Route for resetting password
-router.post(
-  '/password/reset/verify',
-  [
-    body('email').exists().withMessage('Email is required'),
-    body('password').exists().withMessage('New password is required'),
-  ],
-  adminControllers.authMiddleware,
-  adminControllers.resetPassword
-);
 
 // Route for resetting user name
-router.post('/name/reset', [body('rename').exists().withMessage('New name is required')],
- adminControllers.resetName
+router.post('/name/reset', 
+[body('rename').exists().withMessage('New name is required')],
+adminControllers.authMiddleware,adminControllers.resetName
  );
 
-// Route for adding a profile image
-router.post(
-  '/profile_image/add',
-  [
-    body('email').exists().withMessage('Email is required'),
-    body('password').exists().withMessage('Password is required'),
-  ],
-  adminControllers.authMiddleware,
-  adminControllers.addProfileImage
-);
 
-// Route for resetting a profile image
-router.post(
-  '/profile_image/reset',
-  [
-    body('email').exists().withMessage('Email is required'),
-    body('password').exists().withMessage('Password is required'),
-  ],
-  adminControllers.authMiddleware,
-  adminControllers.resetProfileImage
-);
 
 // Route for deleting a user
 router.post(

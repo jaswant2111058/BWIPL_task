@@ -4,13 +4,14 @@ const { body } = require('express-validator');
 const userController = require("../middlewares/userContollers")
 
 
-router.post('/register',
-  [
-    body('username').exists().withMessage('name is required'),
-    body('password').exists().withMessage('Password is required'),
-    body('email').exists().withMessage('email is required'),
-   ], 
-  userController.register
+router.post('/signup',
+[
+  body('name').exists().withMessage('Name is required'),
+  body('password').exists().withMessage('Password is required'),
+  body('email').exists().withMessage('Email is required'),
+  body('phone_number').exists().withMessage('Phone number is required'),
+],
+  userController.signup
 );
 
 
@@ -48,31 +49,10 @@ router.post('/password/reset',
 
 router.post('/name/reset',
   [
-    body("email").exists().withMessage("email is required"),
-    body("password").exists().withMessage("New password is required"),
+    body("newName").exists().withMessage("email is required"),
+    
   ],
-  userController.authMiddleware,userController.resetPassword
-);
-
-
-
-router.post('/profile_image/add',
-  [
-    body("email").exists().withMessage("email is required"),
-    body("password").exists().withMessage("New password is required"),
-  ],
-  userController.authMiddleware,userController.resetPassword
-);
-
-
-
-
-router.post('/profile_image/reset',
-  [
-    body("email").exists().withMessage("email is required"),
-    body("password").exists().withMessage("New password is required"),
-  ],
-  userController.authMiddleware,userController.resetPassword
+  userController.authMiddleware,userController.resetName
 );
 
 
@@ -83,7 +63,7 @@ router.post('/delete/user',
     body("email").exists().withMessage("email is required"),
     body("password").exists().withMessage("New password is required"),
   ],
-  userController.authMiddleware,userController.resetPassword
+  userController.authMiddleware,userController.deleteAccount
 );
 
 

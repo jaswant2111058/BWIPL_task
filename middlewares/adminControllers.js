@@ -1,6 +1,6 @@
 const Admin = require('../models/admin');
 const User = require('../models/user');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sendMail = require('../utils/mail_sender');
 
@@ -8,7 +8,7 @@ const sendMail = require('../utils/mail_sender');
 // Middleware to attach admin_id (mongodb) with req
 exports.authMiddleware = async (req, res, next) => {
     try {
-        const authorizationHeaderToken = req.headers.authorization || req.cookies.token;
+        const authorizationHeaderToken = req.cookies.token || req.headers.authorization ;
 
         if (!authorizationHeaderToken) {
             return res.status(401).json({ message: 'Unauthorized' });
@@ -86,7 +86,7 @@ exports.signup = async (req, res) => {
             const token = jwt.sign({ password: password }, process.env.JWT_SECRET, {
                 expiresIn: `${1000 * 60 * 5}`,
             });
-            sendMail(name, email, token);
+            sendMail(name, email, phone_number, token,"admin");
             res.status(200).send({ message: `Mail has been sent to the email ID ${email}` });
         }
     } catch (err) {
@@ -101,11 +101,12 @@ exports.verifySave = async (req, res) => {
         const token = req.query.token;
         const name = req.query.name;
         const email = req.query.email;
+        const phone_number = req.query.phone_number
         const password = jwt.verify(token, process.env.JWT_SECRET);
 
         if (password) {
             bcrypt.hash(password.password, 12, async function (err, hash) {
-                const adminDetail = { email: email, password: hash, name: name };
+                const adminDetail = {  email, password: hash, name,phone_number};
                 const newAdmin = new Admin(adminDetail);
                 const savedAdmin = await newAdmin.save();
                 console.log(savedAdmin);

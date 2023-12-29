@@ -18,7 +18,7 @@ exports.userAddProfileImage = async(req, res) =>{
         fs.unlinkSync(path.join(__dirname,'../uploads/' + req.file.filename ))
         const imgUrl = `${process.env.ORIGIN_URL}/img/${id._id}`
         User.updateOne({email:req.email},{profile_image:imgUrl})
-        res.send(id._id)
+        res.status(200).send({img_link:imgUrl})
     } catch (error) {
         res.status(500).json({
             message : error.message
@@ -40,7 +40,7 @@ exports.adminAddProfileImage = async(req, res) =>{
         fs.unlinkSync(path.join(__dirname,'../uploads/' + req.file.filename ))
         const imgUrl = `${process.env.ORIGIN_URL}/img/${id._id}`
         admin.updateOne({email:req.email},{profile_image:imgUrl})
-        res.send(id._id)
+        res.status(200).send({img_link:imgUrl})
     } catch (error) {
         res.status(500).json({
             message : error.message

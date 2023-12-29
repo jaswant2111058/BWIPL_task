@@ -16,6 +16,7 @@ const imagesRouter = require('./routes/images');
 
 
 
+
 mongoose.set('strictQuery', true)
 mongoose.connect(process.env.DB_URI, {
     useNewUrlParser: true,
@@ -43,8 +44,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use('/', adminRouter);
-app.use('/', userRouter);
+app.use('/admin', adminRouter);
+app.use('/user', userRouter);
 app.use('/', imagesRouter);
 
 

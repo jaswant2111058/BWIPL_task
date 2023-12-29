@@ -10,7 +10,7 @@ const Schema = new mongoose.Schema({
         unique:[true,"email already exist"],
         required: true
     },
-    phone: {
+    phone_number: {
         type:Number,
         unique:[true,"email already exist"],
         required: true
@@ -21,7 +21,7 @@ const Schema = new mongoose.Schema({
     },
     profile_image:{
         type:String,
-        required:true
+
     },
     status:{
         type:Boolean,

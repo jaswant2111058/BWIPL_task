@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
-const imagesController = require('../controllers/imagesController')
+const userController = require('../middlewares/userContollers');
+const adminController = require('../middlewares/adminControllers');
+const imagesController = require('../middlewares/imageControllers')
 const multer = require("multer");
 
 const  storage = multer.diskStorage({
@@ -22,7 +23,7 @@ router.post('/user/addimg', upload.single('image'),
 );
 
 router.post('/admin/addimg', upload.single('image'),
-    userController.authMiddleware,
+	adminController.authMiddleware,
     imagesController.adminAddProfileImage
 );
 
