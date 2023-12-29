@@ -7,7 +7,7 @@ const sendMail = require('../utils/mail_sender');
 exports.authMiddleware = async (req, res, next) => {
     try {
         const authorizationHeaderToken = req.headers.authorization||req.cookies.token;
-        
+
         if (!authorizationHeaderToken) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
@@ -140,3 +140,9 @@ exports.verifySave = async (req, res) => {
         res.status(500).json({ message: 'Something went wrong' });
     }
 };
+
+
+
+
+
+

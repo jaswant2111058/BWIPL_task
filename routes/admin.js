@@ -1,112 +1,88 @@
 const express = require('express');
 const router = express.Router();
-const { body, query, param } = require('express-validator');
-const adminContollers = require("../middlewares/adminControllers")
+const { body } = require('express-validator');
+const adminControllers = require('../middlewares/adminControllers');
 
-
-router.post('/register',
+// Route for user registration
+router.post(
+  '/register',
   [
-    body('name').exists().withMessage('name is required'),
+    body('name').exists().withMessage('Name is required'),
     body('password').exists().withMessage('Password is required'),
-    body('email').exists().withMessage('email is required'),
-    body('phone_number').exists().withMessage('phone number is required'),
-   ], 
-  adminContollers.register
+    body('email').exists().withMessage('Email is required'),
+    body('phone_number').exists().withMessage('Phone number is required'),
+  ],
+  adminControllers.register
 );
 
+// Route for email verification
+router.get('/email/verification', adminControllers.verifySave);
 
-router.get('/email/verification',
-adminContollers.verifySave
-);
-
-
-router.post('/login',
+// Route for user login
+router.post(
+  '/login',
   [
-    body('email').exists().withMessage('email is required'),
+    body('email').exists().withMessage('Email is required'),
     body('password').exists().withMessage('Password is required'),
   ],
- 
-  adminContollers.login
+  adminControllers.login
 );
 
+// Route for sending OTP for password reset
+router.post('/password/reset', [body('email').exists().withMessage('Email is required')], 
+adminControllers.sendRestmail);
 
-
-
-router.post('/password/reset',
+// Route for resetting password
+router.post(
+  '/password/reset/verify',
   [
-    body("email").exists().withMessage("email is required"),
+    body('email').exists().withMessage('Email is required'),
+    body('password').exists().withMessage('New password is required'),
   ],
-  adminContollers.sendOtp
+  adminControllers.authMiddleware,adminControllers.resetPassword
 );
 
+// Route for resetting user name
+router.post('/name/reset', [body('rename').exists().withMessage('New name is required')], adminControllers.resetName);
 
-
-
-
-router.post('/password/reset/verify',
+// Route for adding a profile image
+router.post(
+  '/profile_image/add',
   [
-    body("email").exists().withMessage("email is required"),
-    body("password").exists().withMessage("New password is required"),
+    body('email').exists().withMessage('Email is required'),
+    body('password').exists().withMessage('Password is required'),
   ],
-  adminContollers.resetPassword
+  adminControllers.authMiddleware,adminControllers.addProfileImage
 );
 
-
-
-
-
-router.post('/name/reset',
+// Route for resetting a profile image
+router.post(
+  '/profile_image/reset',
   [
-    body("rename").exists().withMessage("rename is required"),
-   
+    body('email').exists().withMessage('Email is required'),
+    body('password').exists().withMessage('Password is required'),
   ],
-  adminContollers.resetName
+  adminControllers.authMiddleware,adminControllers.resetProfileImage
 );
 
-
-router.post('/profile_image/add',
+// Route for deleting a user
+router.post(
+  '/delete/user',
   [
-    body("email").exists().withMessage("email is required"),
-    body("password").exists().withMessage("New password is required"),
+    body('email').exists().withMessage('Email is required'),
+    body('password').exists().withMessage('Password is required'),
   ],
-  adminContollers.addProfileImage
+  adminControllers.authMiddleware,adminControllers.deleteUser
 );
 
-
-
-
-
-router.post('/profile_image/reset',
+// Route for deleting an admin
+router.post(
+  '/delete/admin',
   [
-    body("email").exists().withMessage("email is required"),
-    body("password").exists().withMessage("New password is required"),
+    body('email').exists().withMessage('Email is required'),
+    body('password').exists().withMessage('Password is required'),
   ],
-  adminContollers.resetProfileImage
+  adminControllers.authMiddleware,adminControllers.deleteAdmin
 );
-
-
-
-
-router.post('/delete/user',
-  [
-    body("email").exists().withMessage("email is required"),
-    body("password").exists().withMessage("New password is required"),
-  ],
-  adminContollers.deleteUser
-);
-
-
-
-
-router.post('/delete/admin',
-  [
-    body("email").exists().withMessage("email is required"),
-    body("password").exists().withMessage("New password is required"),
-  ],
-  adminContollers.deleteAdmin
-);
-
-
-
 
 module.exports = router;
