@@ -10,12 +10,9 @@ const app = express();
 
 
 
-const indexRouter = require('./routes/indexRouter');
-const authRouter = require('./routes/userRouter');
-const imagesRouter = require('./routes/imagesRouter');
-const eventRouter = require('./routes/eventRouter');
-const searchRouter = require('./routes/searchRouter');
-
+const adminRouter = require('./routes/admin');
+const userRouter = require('./routes/user');
+const imagesRouter = require('./routes/images');
 
 
 
@@ -46,12 +43,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use('/', indexRouter);
-app.use('/', authRouter);
+app.use('/', adminRouter);
+app.use('/', userRouter);
 app.use('/', imagesRouter);
-app.use('/', eventRouter);
-app.use('/', searchRouter);
-
 
 
 
